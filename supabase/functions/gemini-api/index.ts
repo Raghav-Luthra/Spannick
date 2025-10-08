@@ -82,15 +82,12 @@ Deno.serve(async (req: Request) => {
     const geminiResponse = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=${apiKey}`
       {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts }],
-          generationConfig: {
-            temperature: 0.4,
-            topK: 32,
-            topP: 1,
-            maxOutputTokens: 8192,
+         generationConfig: {
+    // You must REMOVE the responseMimeType line
+    temperature: 0.4,
+    topK: 32,
+    topP: 1,
+    maxOutputTokens: 8192
 
           }
         })
