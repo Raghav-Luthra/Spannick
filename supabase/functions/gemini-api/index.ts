@@ -56,17 +56,15 @@ Deno.serve(async (req: Request) => {
         ];
         break;
 
-// Prompt for combined Avatar Creation and Outfit Swap
-
-case 'generateCombinedAvatarTryOn':
-  if (!body.userImage || !body.garmentImage) throw new Error('userImage and garmentImage are required');
-  prompt = "You are an advanced, professional AI Avatar & Virtual Try-On system. Your task is to take the person from the first image and flawlessly impose the new garment from the second image onto them, creating a hyper-realistic, professional fashion photograph.\n\n### CRITICAL DIRECTIVE: MANDATORY GARMENT SWAP\n1.  **GARMENT APPLICATION (PRIORITY 1):** You *MUST*, without exception, **completely and cleanly remove ALL original clothing** from the person and **flawlessly REPLACE it with the garment** from the second input image.\n2.  **NO TRACE OF OLD CLOTHING:** Ensure absolutely no part of the original attire is visible. The new garment must be the *only* clothing present.\n3.  **REALISM & FIT:** The new garment must perfectly preserve its color, pattern, texture, and design. It must fit the person's body shape and pose naturally, simulating authentic fabric draping, folds, and wrinkles based on the material.\n\n### CRITICAL DIRECTIVE: IDENTITY & CONTEXT PRESERVATION\n4.  **IDENTITY PRESERVATION (PRIORITY 2):** Preserve the person's exact **face, facial features, expression, hair (style and color), skin tone, and body proportions** without any modification. The final output must be unmistakably the same individual.\n5.  **POSE & COMPOSITION:** Maintain a straight-on, neutral, relaxed standing pose. The framing must be a centered, full-body shot.\n6.  **BACKGROUND:** The background must be a clean, solid light grey studio background **(#f0f0f0)**, free of shadows or distractions.\n\n### FINAL INTEGRATION & QUALITY:\n7.  **LIGHTING MATCH:** The lighting and shadows on the new garment must **perfectly match** the professional, even studio lighting of the scene. Add realistic shadows where the fabric interacts with itself and the body.\n8.  **PHOTOREALISM:** The final image must be of the highest photorealistic and high-resolution quality, looking exactly like a final, polished e-commerce studio photograph.\n\n**OUTPUT:** Return ONLY the final composite image. No text, labels, or annotations.";
-  parts = [
-    { inline_data: { mime_type: body.userImage.split(';')[0].split(':')[1], data: body.userImage.split(',')[1] } },
-    { inline_data: { mime_type: body.garmentImage.split(';')[0].split(':')[1], data: body.garmentImage.split(',')[1] } },
-    { text: prompt }
-  ];
-  break;
+      case 'generateTryOn':
+        if (!body.modelImage || !body.garmentImage) throw new Error('modelImage and garmentImage are required');
+        prompt = "You are an expert virtual try-on AI system. You will receive TWO images:\n1. MODEL IMAGE: A person in a fashion photo\n2. GARMENT IMAGE: A clothing item to be worn\n\nYour task: Create a photorealistic image showing the person wearing the new garment.\n\nCRITICAL INSTRUCTIONS:\n\n**GARMENT APPLICATION:**\n- COMPLETELY REMOVE the original clothing from the model\n- REPLACE it with the garment from the second image\n- The new garment must fit naturally on the person's body\n- Preserve all details of the new garment: color, pattern, texture, style, design elements\n- NO traces of the original clothing should remain visible\n- Ensure proper draping, wrinkles, and fabric behavior based on the pose\n\n**PRESERVE EXACTLY:**\n- Person's face, facial features, and expression\n- Hair style and color\n- Skin tone and body shape\n- Body proportions and posture\n- The exact pose and stance\n- The entire background without any changes\n- Lighting conditions and shadows\n\n**TECHNICAL REQUIREMENTS:**\n- The garment must adapt realistically to the person's pose\n- Add natural shadows and highlights where the fabric would create them\n- Ensure the garment fits the body properly (not too tight or loose)\n- Maintain photorealistic quality throughout\n- The lighting on the garment should match the scene lighting\n- Edges and transitions should be seamless\n\n**OUTPUT:**\nReturn ONLY the final composite image. No text, labels, or annotations.\n\nThe result must look like the person is genuinely wearing the new garment in a professional fashion photograph.";
+        parts = [
+          { inline_data: { mime_type: body.modelImage.split(';')[0].split(':')[1], data: body.modelImage.split(',')[1] } },
+          { inline_data: { mime_type: body.garmentImage.split(';')[0].split(':')[1], data: body.garmentImage.split(',')[1] } },
+          { text: prompt }
+        ];
+        break;
 
       case 'generatePose':
         if (!body.tryOnImage || !body.poseInstruction) throw new Error('tryOnImage and poseInstruction are required');
