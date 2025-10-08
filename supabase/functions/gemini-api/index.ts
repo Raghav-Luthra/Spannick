@@ -80,14 +80,18 @@ Deno.serve(async (req: Request) => {
     }
 
     const geminiResponse = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${apiKey}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           contents: [{ parts }],
           generationConfig: {
-            response_modalities: ['image']
+            temperature: 0.4,
+            topK: 32,
+            topP: 1,
+            maxOutputTokens: 8192,
+            responseMimeType: 'image/jpeg'
           }
         })
       }
@@ -106,20 +110,23 @@ Deno.serve(async (req: Request) => {
     }
 
     for (const candidate of geminiData.candidates ?? []) {
-      const imagePart = candidate.content?.parts?.find((part: any) => part.inlineData || part.inline_data);
-      if (imagePart) {
-        const inlineData = imagePart.inlineData || imagePart.inline_data;
-        const { mimeType, mime_type, data } = inlineData;
-        const finalMimeType = mimeType || mime_type;
-        return new Response(
-          JSON.stringify({ imageUrl: `data:${finalMimeType};base64,${data}` }),
-          {
-            headers: {
-              ...corsHeaders,
-              'Content-Type': 'application/json',
-            },
+      if (candidate.content?.parts) {
+        for (const part of candidate.content.parts) {
+          const inlineData = part.inlineData || part.inline_data;
+          if (inlineData) {
+            const { mimeType, mime_type, data } = inlineData;
+            const finalMimeType = mimeType || mime_type || 'image/jpeg';
+            return new Response(
+              JSON.stringify({ imageUrl: `data:${finalMimeType};base64,${data}` }),
+              {
+                headers: {
+                  ...corsHeaders,
+                  'Content-Type': 'application/json',
+                },
+              }
+            );
           }
-        );
+        }
       }
     }
 
