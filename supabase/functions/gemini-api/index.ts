@@ -47,10 +47,18 @@ Deno.serve(async (req: Request) => {
     let parts: any[] = [];
 
     const parseDataUrl = (dataUrl: string): { mimeType: string; data: string } => {
+      if (!dataUrl || typeof dataUrl !== 'string') {
+        console.error('[parseDataUrl] Received invalid input:', typeof dataUrl);
+        throw new Error('Data URL must be a non-empty string');
+      }
+
       const matches = dataUrl.match(/^data:([^;]+);base64,(.+)$/);
       if (!matches || matches.length !== 3) {
-        throw new Error('Invalid data URL format');
+        console.error('[parseDataUrl] Failed to parse data URL. First 100 chars:', dataUrl.substring(0, 100));
+        throw new Error(`Invalid data URL format. Expected format: data:image/...;base64,...`);
       }
+
+      console.log('[parseDataUrl] Successfully parsed:', matches[1], 'data length:', matches[2].length);
       return { mimeType: matches[1], data: matches[2] };
     };
 
@@ -67,9 +75,17 @@ Deno.serve(async (req: Request) => {
 
       case 'generateTryOn':
         if (!body.modelImage || !body.garmentImage) throw new Error('modelImage and garmentImage are required');
+        console.log('[generateTryOn] Starting try-on generation');
+        console.log('[generateTryOn] Model image type:', typeof body.modelImage, 'length:', body.modelImage?.length);
+        console.log('[generateTryOn] Garment image type:', typeof body.garmentImage, 'length:', body.garmentImage?.length);
+
         prompt = "You are an expert virtual try-on AI system. You will receive TWO images:\n1. MODEL IMAGE: A person in a fashion photo\n2. GARMENT IMAGE: A clothing item to be worn\n\nYour task: Create a photorealistic image showing the person wearing the new garment.\n\nCRITICAL INSTRUCTIONS:\n\n**GARMENT APPLICATION:**\n- COMPLETELY REMOVE the original clothing from the model\n- REPLACE it with the garment from the second image\n- The new garment must fit naturally on the person's body\n- Preserve all details of the new garment: color, pattern, texture, style, design elements\n- NO traces of the original clothing should remain visible\n- Ensure proper draping, wrinkles, and fabric behavior based on the pose\n\n**PRESERVE EXACTLY:**\n- Person's face, facial features, and expression\n- Hair style and color\n- Skin tone and body shape\n- Body proportions and posture\n- The exact pose and stance\n- The entire background without any changes\n- Lighting conditions and shadows\n\n**TECHNICAL REQUIREMENTS:**\n- The garment must adapt realistically to the person's pose\n- Add natural shadows and highlights where the fabric would create them\n- Ensure the garment fits the body properly (not too tight or loose)\n- Maintain photorealistic quality throughout\n- The lighting on the garment should match the scene lighting\n- Edges and transitions should be seamless\n\n**OUTPUT:**\nReturn ONLY the final composite image. No text, labels, or annotations.\n\nThe result must look like the person is genuinely wearing the new garment in a professional fashion photograph.";
+
         const modelImageData = parseDataUrl(body.modelImage);
         const garmentImageData = parseDataUrl(body.garmentImage);
+        console.log('[generateTryOn] Parsed model image:', modelImageData.mimeType);
+        console.log('[generateTryOn] Parsed garment image:', garmentImageData.mimeType);
+
         parts = [
           { inline_data: { mime_type: modelImageData.mimeType, data: modelImageData.data } },
           { inline_data: { mime_type: garmentImageData.mimeType, data: garmentImageData.data } },
@@ -95,31 +111,43 @@ Deno.serve(async (req: Request) => {
     let retryCount = 0;
     const maxRetries = 3;
 
+    const requestPayload = {
+      contents: [{ parts }],
+      generationConfig: {
+        temperature: 0.4,
+        topK: 32,
+        topP: 1,
+        maxOutputTokens: 8192,
+        response_modalities: ['image']
+      }
+    };
+
+    console.log('[Gemini Request] Action:', body.action);
+    console.log('[Gemini Request] Parts count:', parts.length);
+    console.log('[Gemini Request] Parts types:', parts.map(p => p.inline_data ? 'image' : 'text'));
+
     while (retryCount < maxRetries) {
       geminiResponse = await fetch(
         `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=${apiKey}`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            contents: [{ parts }],
-            generationConfig: {
-              temperature: 0.4,
-              topK: 32,
-              topP: 1,
-              maxOutputTokens: 8192,
-              response_modalities: ['image']
-            }
-          })
+          body: JSON.stringify(requestPayload)
         }
       );
+
+      console.log(`[Gemini Response] Attempt ${retryCount + 1}, Status: ${geminiResponse.status}`);
 
       if (geminiResponse.ok) {
         break;
       }
 
+      const errorText = await geminiResponse.text();
+      console.error(`[Gemini Error] Attempt ${retryCount + 1}:`, errorText);
+
       retryCount++;
       if (retryCount < maxRetries) {
+        console.log(`[Retry] Waiting ${1000 * retryCount}ms before retry...`);
         await new Promise(resolve => setTimeout(resolve, 1000 * retryCount));
       }
     }
