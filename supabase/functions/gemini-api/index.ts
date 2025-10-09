@@ -97,7 +97,7 @@ Deno.serve(async (req: Request) => {
 
     while (retryCount < maxRetries) {
       geminiResponse = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${apiKey}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=${apiKey}`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -108,8 +108,7 @@ Deno.serve(async (req: Request) => {
               topK: 32,
               topP: 1,
               maxOutputTokens: 8192,
-              responseMimeType: "image/jpeg",
-              response_modalities: ['IMAGE']
+              response_modalities: ['image']
             }
           })
         }
