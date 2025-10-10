@@ -20,15 +20,6 @@ const callEdgeFunction = async (action: string, payload: any): Promise<string> =
 
     const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/gemini-api`;
 
-    console.log(`[Frontend] Calling edge function with action: ${action}`);
-    console.log(`[Frontend] Payload keys:`, Object.keys(payload));
-
-    for (const key of Object.keys(payload)) {
-        if (typeof payload[key] === 'string' && payload[key].startsWith('data:')) {
-            console.log(`[Frontend] ${key}: data URL of length ${payload[key].length}, mime: ${payload[key].substring(0, 30)}`);
-        }
-    }
-
     const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
@@ -40,12 +31,10 @@ const callEdgeFunction = async (action: string, payload: any): Promise<string> =
 
     if (!response.ok) {
         const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
-        console.error('[Frontend] Edge function error:', errorData);
         throw new Error(errorData.error || `Edge function error: ${response.status}`);
     }
 
     const data = await response.json();
-    console.log('[Frontend] Received response, imageUrl length:', data.imageUrl?.length);
     return data.imageUrl;
 };
 
