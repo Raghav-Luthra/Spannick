@@ -128,7 +128,7 @@ Deno.serve(async (req: Request) => {
 
     while (retryCount < maxRetries) {
       geminiResponse = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=${apiKey}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${apiKey}`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -154,7 +154,7 @@ Deno.serve(async (req: Request) => {
 
     if (!geminiResponse.ok) {
       const errorText = await geminiResponse.text();
-      throw new Error(`Gemini API error: ${errorText}`);
+      throw new Error(`Gemini API error after ${maxRetries} attempts: ${errorText}`);
     }
 
     const geminiData = await geminiResponse.json();
@@ -190,7 +190,7 @@ Deno.serve(async (req: Request) => {
     throw new Error('The AI model did not return an image');
 
   } catch (error) {
-    console.error('Error:', error);
+    console.error('[Error]', error);
     return new Response(
       JSON.stringify({ error: error instanceof Error ? error.message : 'Unknown error' }),
       {
