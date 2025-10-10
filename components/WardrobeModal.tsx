@@ -81,11 +81,11 @@ const WardrobePanel: React.FC<WardrobePanelProps> = ({ onGarmentSelect, activeGa
 
   return (
     <div className="space-y-3 md:space-y-4">
-      <h2 className="section-title text-lg md:text-xl border-b border-accent-text border-opacity-30 pb-2 md:pb-3">
+      <h2 className="section-title text-lg md:text-xl border-b border-accent-text border-opacity-30 pb-3">
         Atelier Collection
       </h2>
 
-      <div className="grid grid-cols-2 gap-2 md:gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3">
         {wardrobe.map((item) => {
           const isActive = activeGarmentIds.includes(item.id);
           return (

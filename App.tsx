@@ -222,9 +222,9 @@ const App: React.FC = () => {
 
             {/* Sidebar - Mobile Bottom Sheet / Desktop Sidebar */}
             <aside
-              className={`fixed md:relative bottom-0 left-0 right-0 md:w-80 glass-card border-t md:border-t-0 md:border-l border-opacity-20 transition-all duration-300 ease-out z-20 md:h-auto ${
+              className={`fixed md:relative bottom-0 left-0 right-0 md:w-96 glass-card border-t md:border-t-0 md:border-l border-opacity-20 transition-all duration-300 ease-out z-20 md:h-auto ${
                 isSheetCollapsed ? 'translate-y-[calc(100%-3.5rem)]' : 'translate-y-0'
-              } md:translate-y-0`}
+              } md:translate-y-0 md:flex md:flex-col`}
               style={{
                 maxHeight: isMobile ? (isSheetCollapsed ? '3.5rem' : '75vh') : 'none'
               }}
@@ -252,9 +252,9 @@ const App: React.FC = () => {
               </button>
 
               {/* Sidebar Content */}
-              <div className={`overflow-y-auto space-y-6 md:space-y-8 ${
+              <div className={`overflow-y-auto space-y-6 md:space-y-6 ${
                 isSheetCollapsed ? 'h-0' : 'h-[calc(75vh-3.5rem)] p-4'
-              } md:h-full md:p-6 md:pb-20`}>
+              } md:h-full md:p-8`}>
                 {error && (
                   <div className="glass-card p-4 border-red-500 border" role="alert">
                     <p className="font-semibold text-red-400 mb-1">Error</p>

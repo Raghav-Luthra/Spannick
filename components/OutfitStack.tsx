@@ -15,15 +15,15 @@ interface OutfitStackProps {
 const OutfitStack: React.FC<OutfitStackProps> = ({ outfitHistory, onRemoveLastGarment }) => {
   return (
     <div className="space-y-3 md:space-y-4">
-      <h2 className="section-title text-lg md:text-xl border-b border-accent-text border-opacity-30 pb-2 md:pb-3">
+      <h2 className="section-title text-lg md:text-xl border-b border-accent-text border-opacity-30 pb-3">
         Ensemble Stack
       </h2>
 
-      <div className="space-y-2 md:space-y-3">
+      <div className="space-y-2.5 max-h-64 md:max-h-72 overflow-y-auto">
         {outfitHistory.map((layer, index) => (
           <div
             key={layer.garment?.id || 'base'}
-            className="luxury-card flex items-center justify-between fade-in"
+            className="luxury-card flex items-center justify-between fade-in py-3 px-4"
           >
             <div className="flex items-center gap-2 md:gap-3 flex-1 min-w-0">
               <span className="flex-shrink-0 w-7 h-7 md:w-8 md:h-8 bg-accent-text text-black rounded-full flex-center text-xs md:text-sm font-bold">

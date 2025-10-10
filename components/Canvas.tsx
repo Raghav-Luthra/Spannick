@@ -120,17 +120,18 @@ const Canvas: React.FC<CanvasProps> = ({
         >
           {/* Pose Menu */}
           {isPoseMenuOpen && (
-            <div className="absolute bottom-full mb-4 w-full md:w-72 glass-card p-3 md:p-4 fade-in left-1/2 transform -translate-x-1/2">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div className="absolute bottom-full mb-4 w-full md:w-96 glass-card p-3 md:p-5 fade-in left-1/2 transform -translate-x-1/2">
+              <h3 className="text-sm font-semibold mb-3 text-accent-text hidden md:block">Select Pose</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 md:gap-2.5">
                 {poseInstructions.map((pose, index) => (
                   <button
                     key={pose}
                     onClick={() => onSelectPose(index)}
                     disabled={isLoading || index === currentPoseIndex}
-                    className={`text-left text-xs md:text-sm p-2 md:p-3 rounded-lg transition-all ${
+                    className={`text-left text-xs md:text-sm p-2.5 md:p-3 rounded-lg transition-all border ${
                       index === currentPoseIndex
-                        ? 'bg-accent-text bg-opacity-20 font-semibold cursor-not-allowed'
-                        : 'hover:bg-white hover:bg-opacity-10'
+                        ? 'bg-accent-text bg-opacity-20 font-semibold cursor-not-allowed border-accent-text border-opacity-50'
+                        : 'hover:bg-white hover:bg-opacity-10 border-white border-opacity-10 hover:border-opacity-30'
                     }`}
                   >
                     {pose}
