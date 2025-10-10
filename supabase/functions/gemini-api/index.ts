@@ -58,7 +58,7 @@ Deno.serve(async (req: Request) => {
 
       case 'generateTryOn':
         if (!body.modelImage || !body.garmentImage) throw new Error('modelImage and garmentImage are required');
-        prompt = "act as professional photographer ai , 1st image i provide is the model, 2nd image i provide is the our outfit. You must properly apply our outfit on the model. The clothes must be fitted perfectly with their fitting.You must complete the job accurately and change outfits preciesly everytime.";
+        prompt = "act as professional photographer ai , 1st image i provide is the model, 2nd image i provide is the our outfit. You must properly apply our outfit on the model. The clothes must be fitted perfectly with their fitting.You must complete the job accurately and change outfits preciesly everytime. The outfit pattern and colour must remain exactly same.";
         parts = [
           { inline_data: { mime_type: body.modelImage.split(';')[0].split(':')[1], data: body.modelImage.split(',')[1] } },
           { inline_data: { mime_type: body.garmentImage.split(';')[0].split(':')[1], data: body.garmentImage.split(',')[1] } },
