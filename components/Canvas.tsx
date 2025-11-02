@@ -114,21 +114,21 @@ const Canvas: React.FC<CanvasProps> = ({
       {/* Pose Controls */}
       {displayImageUrl && !isLoading && (
         <div
-          className="absolute bottom-4 md:bottom-8 left-1/2 transform -translate-x-1/2 z-30 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all duration-300 w-[calc(100%-2rem)] md:w-auto"
+          className="absolute bottom-4 md:bottom-12 left-1/2 transform -translate-x-1/2 z-30 w-[calc(100%-2rem)] md:w-full md:static md:transform-none md:bottom-auto md:left-auto md:right-auto md:mt-6 md:px-8"
           onMouseEnter={() => setIsPoseMenuOpen(true)}
           onMouseLeave={() => setIsPoseMenuOpen(false)}
         >
           {/* Pose Menu */}
           {isPoseMenuOpen && (
-            <div className="absolute bottom-full mb-4 w-full md:w-96 glass-card p-3 md:p-5 fade-in left-1/2 transform -translate-x-1/2">
-              <h3 className="text-sm font-semibold mb-3 text-accent-text hidden md:block">Select Pose</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 md:gap-2.5">
+            <div className="absolute bottom-full mb-4 md:static md:mb-0 w-full md:w-full glass-card p-3 md:p-4 fade-in left-1/2 md:left-auto transform -translate-x-1/2 md:transform-none">
+              <h3 className="text-sm font-semibold mb-3 text-accent-text">Select Pose</h3>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 md:gap-2">
                 {poseInstructions.map((pose, index) => (
                   <button
                     key={pose}
                     onClick={() => onSelectPose(index)}
                     disabled={isLoading || index === currentPoseIndex}
-                    className={`text-left text-xs md:text-sm p-2.5 md:p-3 rounded-lg transition-all border ${
+                    className={`text-center text-xs md:text-xs p-2 md:p-2 rounded-lg transition-all border whitespace-normal ${
                       index === currentPoseIndex
                         ? 'bg-accent-text bg-opacity-20 font-semibold cursor-not-allowed border-accent-text border-opacity-50'
                         : 'hover:bg-white hover:bg-opacity-10 border-white border-opacity-10 hover:border-opacity-30'
@@ -142,27 +142,27 @@ const Canvas: React.FC<CanvasProps> = ({
           )}
 
           {/* Pose Navigation */}
-          <div className="glass-card p-2 md:p-3 flex items-center gap-2 md:gap-3 justify-center">
+          <div className="md:hidden glass-card p-2 flex items-center gap-2 justify-center mt-3">
             <button
               onClick={handlePreviousPose}
               disabled={isLoading}
-              className="btn-ghost p-1.5 md:p-2"
+              className="btn-ghost p-1.5"
               aria-label="Previous pose"
             >
-              <ChevronLeftIcon className="w-4 h-4 md:w-5 md:h-5" />
+              <ChevronLeftIcon className="w-4 h-4" />
             </button>
 
-            <span className="text-xs md:text-sm font-medium w-32 md:w-48 text-center truncate" title={poseInstructions[currentPoseIndex]}>
+            <span className="text-xs font-medium w-24 text-center truncate" title={poseInstructions[currentPoseIndex]}>
               {poseInstructions[currentPoseIndex]}
             </span>
 
             <button
               onClick={handleNextPose}
               disabled={isLoading}
-              className="btn-ghost p-1.5 md:p-2"
+              className="btn-ghost p-1.5"
               aria-label="Next pose"
             >
-              <ChevronRightIcon className="w-4 h-4 md:w-5 md:h-5" />
+              <ChevronRightIcon className="w-4 h-4" />
             </button>
           </div>
         </div>

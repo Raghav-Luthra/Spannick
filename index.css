@@ -586,6 +586,7 @@ textarea:focus {
   .md\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .md\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .md\:grid-cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .md\:grid-cols-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
   
   .md\:gap-6 { gap: 1.5rem; }
   .md\:gap-8 { gap: 2rem; }
@@ -602,10 +603,15 @@ textarea:focus {
   
   .md\:relative { position: relative; }
   .md\:translate-y-0 { --tw-translate-y: 0px; transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y)); }
+  .md\:transform-none { transform: none; }
+
+  .md\:mt-6 { margin-top: 1.5rem; }
+  .md\:px-8 { padding-left: 2rem; padding-right: 2rem; }
   
   .md\:border-t-0 { border-top-width: 0px; }
   .md\:border-l { border-left-width: 1px; }
   
+  .md\:static { position: static; }
   .md\:block { display: block; }
   .md\:hidden { display: none; }
   .md\:flex { display: flex; }
