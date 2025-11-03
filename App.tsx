@@ -252,9 +252,9 @@ const App: React.FC = () => {
               </button>
 
               {/* Sidebar Content */}
-              <div className={`overflow-y-auto space-y-6 md:space-y-6 ${
+              <div className={`overflow-y-auto space-y-0 md:space-y-0 flex flex-col ${
                 isSheetCollapsed ? 'h-0' : 'h-[calc(75vh-3.5rem)] p-4'
-              } md:h-full md:p-8`}>
+              } md:h-full md:p-6`}>
                 {error && (
                   <div className="glass-card p-4 border-red-500 border" role="alert">
                     <p className="font-semibold text-red-400 mb-1">Error</p>
@@ -273,6 +273,29 @@ const App: React.FC = () => {
                   isLoading={isLoading}
                   wardrobe={wardrobe}
                 />
+
+                {/* Desktop Pose Selector */}
+                {modelImageUrl && !isLoading && (
+                  <div className="hidden md:block mt-auto pt-4 border-t border-accent-text border-opacity-20">
+                    <h3 className="text-sm font-semibold mb-3 text-accent-text">Change Pose</h3>
+                    <div className="grid grid-cols-2 gap-2">
+                      {POSE_INSTRUCTIONS.map((pose, index) => (
+                        <button
+                          key={pose}
+                          onClick={() => handlePoseSelect(index)}
+                          disabled={isLoading || index === currentPoseIndex}
+                          className={`text-left text-xs p-2.5 rounded-lg transition-all border ${
+                            index === currentPoseIndex
+                              ? 'bg-accent-text bg-opacity-20 font-semibold cursor-not-allowed border-accent-text border-opacity-50'
+                              : 'hover:bg-white hover:bg-opacity-10 border-white border-opacity-10 hover:border-opacity-30'
+                          }`}
+                        >
+                          {pose}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </aside>
           </main>

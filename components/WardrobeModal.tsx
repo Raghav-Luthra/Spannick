@@ -80,12 +80,12 @@ const WardrobePanel: React.FC<WardrobePanelProps> = ({ onGarmentSelect, activeGa
     };
 
   return (
-    <div className="space-y-3 md:space-y-3 flex flex-col h-full">
-      <h2 className="section-title text-sm md:text-base border-b border-accent-text border-opacity-30 pb-2">
+    <div className="flex flex-col h-full overflow-hidden">
+      <h2 className="section-title text-sm md:text-base border-b border-accent-text border-opacity-30 pb-2 flex-shrink-0">
         Atelier Collection
       </h2>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-2.5 flex-1">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3 flex-1 overflow-y-auto mt-3">
         {wardrobe.map((item) => {
           const isActive = activeGarmentIds.includes(item.id);
           return (

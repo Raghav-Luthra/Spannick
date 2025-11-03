@@ -111,38 +111,10 @@ const Canvas: React.FC<CanvasProps> = ({
         )}
       </div>
 
-      {/* Pose Controls */}
+      {/* Pose Navigation - Mobile Only Under Avatar */}
       {displayImageUrl && !isLoading && (
-        <div
-          className="absolute bottom-4 md:bottom-12 left-1/2 transform -translate-x-1/2 z-30 w-[calc(100%-2rem)] md:w-full md:static md:transform-none md:bottom-auto md:left-auto md:right-auto md:mt-6 md:px-8"
-          onMouseEnter={() => setIsPoseMenuOpen(true)}
-          onMouseLeave={() => setIsPoseMenuOpen(false)}
-        >
-          {/* Pose Menu */}
-          {isPoseMenuOpen && (
-            <div className="absolute bottom-full mb-4 md:static md:mb-0 w-full md:w-full glass-card p-3 md:p-4 fade-in left-1/2 md:left-auto transform -translate-x-1/2 md:transform-none">
-              <h3 className="text-sm font-semibold mb-3 text-accent-text">Select Pose</h3>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 md:gap-2">
-                {poseInstructions.map((pose, index) => (
-                  <button
-                    key={pose}
-                    onClick={() => onSelectPose(index)}
-                    disabled={isLoading || index === currentPoseIndex}
-                    className={`text-center text-xs md:text-xs p-2 md:p-2 rounded-lg transition-all border whitespace-normal ${
-                      index === currentPoseIndex
-                        ? 'bg-accent-text bg-opacity-20 font-semibold cursor-not-allowed border-accent-text border-opacity-50'
-                        : 'hover:bg-white hover:bg-opacity-10 border-white border-opacity-10 hover:border-opacity-30'
-                    }`}
-                  >
-                    {pose}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Pose Navigation */}
-          <div className="md:hidden glass-card p-2 flex items-center gap-2 justify-center mt-3">
+        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-30 w-[calc(100%-2rem)] md:hidden">
+          <div className="glass-card p-2.5 flex items-center gap-2.5 justify-center">
             <button
               onClick={handlePreviousPose}
               disabled={isLoading}
@@ -152,7 +124,7 @@ const Canvas: React.FC<CanvasProps> = ({
               <ChevronLeftIcon className="w-4 h-4" />
             </button>
 
-            <span className="text-xs font-medium w-24 text-center truncate" title={poseInstructions[currentPoseIndex]}>
+            <span className="text-xs font-medium w-28 text-center truncate" title={poseInstructions[currentPoseIndex]}>
               {poseInstructions[currentPoseIndex]}
             </span>
 
